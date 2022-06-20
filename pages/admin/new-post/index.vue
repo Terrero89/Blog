@@ -1,6 +1,8 @@
 <template>
+<!-- admin new post page -->
   <div class="admin-new-post-page">
     <section class="new-post-form">
+      <!-- form for admin specifically -->
       <AdminPostForm />
     </section>
   </div>

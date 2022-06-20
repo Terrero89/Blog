@@ -1,23 +1,14 @@
 <template>
   <section class="post-list">
     <PostPreview
-      id="1"
+    v-for="post in posts"
+     :key="post.id"
+      :id="post.id"
       :is-admin="isAdmin"
-      thumbnail="https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg"
-      title="Hello there!"
-      previewText="This my first post!" />
-    <PostPreview
-      id="2"
-      :is-admin="isAdmin"
-      thumbnail="https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg"
-      title="Hello there - the second time!"
-      previewText="This my second post!" />
-    <PostPreview
-      id="3"
-      :is-admin="isAdmin"
-      thumbnail="https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg"
-      title="Hi!"
-      previewText="This my third post!" />
+      :thumbnail="post.thumbnail"
+      :title="post.title"
+      :previewText="post.previewText" />
+
   </section>
 </template>
 
@@ -28,10 +19,16 @@ export default {
   components: {
     PostPreview
   },
+  // will bind prop to is admin, to be able to detect if is admin or not, and display info
   props: {
     isAdmin: {
       type: Boolean,
       default: false
+    },
+    // post that we are going to loop through, coming from a parent component,or pina/vuex
+    posts: {
+      type: Array,
+      required: true
     }
   }
 }

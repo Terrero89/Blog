@@ -1,6 +1,9 @@
 <template>
   <div class="admin-post-page">
     <section class="update-form">
+      <!-- object that from chil component that will  load up the loaded post in this one by binding it together -->
+      <!-- loaded post is a data prop  -->
+      <!-- :post is the prop coming from child component-->
       <AdminPostForm :post="loadedPost" />
     </section>
   </div>

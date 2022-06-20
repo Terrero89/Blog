@@ -1,10 +1,14 @@
 <template>
+<!-- page will provide authenticatin,if is admin or not whe signing in -->
   <div class="admin-auth-page">
     <div class="auth-container">
+      <!-- Form that is used to input information.  -->
       <form>
         <AppControlInput type="email">E-Mail Address</AppControlInput>
         <AppControlInput type="password">Password</AppControlInput>
+        <!-- conditional that will change depending if is logged in or not. -->
         <AppButton type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</AppButton>
+        <!-- conditional that will change depending if is admin or not. -->
         <AppButton
           type="button"
           btn-style="inverted"

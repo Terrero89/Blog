@@ -1,10 +1,13 @@
 <template>
+<!-- admin page -->
   <div class="admin-page">
     <section class="new-post">
+      <!-- button will route the user to the below route -->
       <AppButton @click="$router.push('/admin/new-post')">Create Post</AppButton>
     </section>
     <section class="existing-posts">
       <h1>Existing Posts</h1>
+      <!-- is admin,  is using the PostList and specifying that is from  an admin page.-->
       <PostList isAdmin />
     </section>
   </div>
