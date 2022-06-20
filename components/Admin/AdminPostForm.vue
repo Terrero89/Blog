@@ -6,6 +6,7 @@
     <AppControlInput
       control-type="textarea"
       v-model="editedPost.content">Content</AppControlInput>
+    <!-- submit form -->
     <AppButton type="submit">Save</AppButton>
     <AppButton
       type="button"
@@ -45,7 +46,9 @@ export default {
   methods: {
     onSave() {
       // Save the post
-      console.log(this.editedPost);
+      // console.log(this.editedPost);
+      //will send as an argument the object from the edited post.
+      this.$emit('submit', this.editedPost)
     },
     onCancel() {
       // Navigate back

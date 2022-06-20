@@ -23,31 +23,7 @@ export default {
   // we can add two arguments to the asyncData => context, callback, instead of executing return, will have the same
   // callback method, and pass an error or null,second arguments is the JS data, in this case, the POSTLIST
 
-  asyncData(context, callback) {
-    console.log("async data working...") //?CODE IS EXECUTED IN SERVER SIDE WHEN NEEDED, AND IN THE CLIENT SIDE.
-     console.log(context)
-    setTimeout(() => {
-      // return { // removed because we are using the callback function
-      callback(null, {
-        loadedPosts: [
-          {
-            id: "1",
-            title: "Golang, the special C++",
-            previewText: "golang is an amazing language because...",
-            thumbnail:
-              "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-          },
-          {
-            id: "2",
-            title: "Python, the future of programming",
-            previewText: "Python is an amazing language because...",
-            thumbnail:
-              "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-          },
-        ],
-      });
-    }, 1500);
-  },
+
   //?: data will not work also, because we need to retrieve the info from the server.
   //?: it will not do it on time for crawlers to check the page.
   // data() {
@@ -65,6 +41,13 @@ export default {
   // created() {
   //!PREVIOUS POSTS LIST WAS HERE.
   // }
+
+
+  computed:{
+      loadedPosts(){
+        return this.$store.getters.loadedPosts
+      }
+  },
 };
 </script>
 
