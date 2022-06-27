@@ -18,13 +18,14 @@ export default {
         AdminPostForm
     },
 
+    //method used to post the blog post
+    //sent ...postData to send them all in an object with updateDate with new data
     methods: {
         onSubmit(postData) {
-            axios.post('https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts.json', postData)
-                .then(result => console.log(result))
-                .catch(e => console.log(e))
+            this.$store.dispatch("addPost", postData).then(() => {
+                this.$router.push("/admin");
+            });
 
-                console.log('request sent')
         }
     },
 };

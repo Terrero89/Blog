@@ -5,6 +5,7 @@
     </section>
 
     <!-- main data should be retrieve from index, as in vue from app.vue -->
+    <!-- prop posts is teh one retrieving all the posts binded to the loaded posts. -->
     <PostList :posts="loadedPosts" />
   </div>
 </template>

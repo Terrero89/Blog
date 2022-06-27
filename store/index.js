@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import axios from 'axios'
 
 const createStore = () => {
 
@@ -11,42 +12,74 @@ const createStore = () => {
     mutations: {
       setPosts(state, posts) {   //payload is == posts
         state.loadedPosts = posts
-      }
+      },
+      addPost(state, post) {
+        //we only push the loadedPosts post to the array
+        state.loadedPosts.push(post)
+      },
+      //to edit posts from the store
+      editPost(state, editedPost) {
+        //find it by index
+        //if in loadedPosts we find an index accepts posts as an arguments  and return
+        //posts.id that is equal the id from editedPost.id
+        const postIndex = state.loadedPosts.findIndex(posts => posts.id === editedPost.id)
+        //we initialize state.loadedPiosts with the found Index, and we replace it with the edited Post
+        state.loadedPosts[postIndex] = editedPost
+      },
     },
+
+
     actions: {
 
       // nuxtServer init
-
+      // nuxt init works as the main way to interact with nuxt server
       nuxtServerInit(vuexContext, context) {
-
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            //code to let nuxt init that we are running client code or server code.
-            if(!process.client){
-                console.log(context.req.session)
+        //? using axios
+        return axios.get("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts.json")
+          .then(res => {
+            //?conver data into an array
+            // array of objects to stract or read data
+            const postArray = []
+            for (const key in res.data) {
+              postArray.push({ ...res.data[key], id: key })
             }
-            vuexContext.commit('setPosts', [
-              {
-                id: "1",
-                title: "Golang, the special C++",
-                previewText: "golang is an amazing language because...",
-                thumbnail: "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-              },
-              {
-                id: "2",
-                title: "Python, the future of programming",
-                previewText: "Python is an amazing language because...",
-                thumbnail: "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-              }
-            ])
-            resolve();
-          }, 1000)
-        })
+            //?then commit the data entering in the store.
+            vuexContext.commit('setPosts', postArray)
+          })
+          .catch(e => context.error(e))
       },
+
+
+
+      addPost(vuexContext, post) {
+
+        //created object to store posts.
+
+        const createdPost = {
+          ...post,
+          updatedDate: new Date()
+        }
+
+        return axios
+        .post("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts.json", createdPost)
+        .then(result => {
+          vuexContext.commit('addPost', {...createdPost, id: result.data.name})
+        })
+          .catch(e => console.log(e))
+
+
+
+      },
+
+      // editPost(vuexContext, editedPost) { },
+      //ACTION TO POST THE BLOG POST
       setPosts(vuexContext, posts) {
         vuexContext.commit('setPosts', posts)
       },
+
     },
+
+
     getters: {
       loadedPosts(state) {
         return state.loadedPosts    //return the entire state of the loadedPosts array
@@ -60,3 +93,7 @@ const createStore = () => {
 
 
 export default createStore
+
+
+
+

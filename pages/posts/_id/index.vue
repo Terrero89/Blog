@@ -20,26 +20,18 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  asyncData(context, callback) {
-    setTimeout(() => {
-      callback(null, {
-        //?DATA WILL BE HERE TO BE RETRIEVE.
-        //?context hold all route parameters, is easier to use when instances are created.
-      //? and will be asynced
-      // contex.route.params -- access all the routes params, if specified id, then will retrieve specific id
-        loadedPost: {
-          id: "1",
-          title: "Golang, the special C++ (ID: " + context.route.params.id + ")", //?context.route.params is == this,.$route.params, is just loaded on initial loading and this.$route is not.
-          previewText: "golang is an amazing language because...",
-          author: "Sergio Terrero",
-          updatedDate: new Date(),
-          content: 'some dummy text for us to see previewed',
-          thumbnail:
-            "https://static.pexels.com/photos/270348/pexels-photo-270348.jpeg",
-        },
-      });
-    }, 1000);
+  asyncData(context) {
+    //we use params.id with context because we are using asyncData
+    //then the promise from axios
+      return axios.get("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts/" + context.params.id + ".json")
+    .then(res =>{
+        return {
+          loadedPost:res.data
+        }
+    })
+    .catch(e => context.error(e))
   },
 };
 </script>

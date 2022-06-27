@@ -8,7 +8,7 @@
     <section class="existing-posts">
       <h1>Existing Posts</h1>
       <!-- is admin,  is using the PostList and specifying that is from  an admin page.-->
-      <PostList isAdmin />
+      <PostList isAdmin  :posts="loadedPosts"/>
     </section>
   </div>
 </template>
@@ -22,6 +22,15 @@ export default {
   components: {
     PostList,
     AppButton
+  },
+
+  computed:{
+    //will be passed to the posts props (binded)
+    //it will load the post in the admin section and
+    
+    loadedPosts(){
+      return this.$store.getters.loadedPosts
+    }
   }
 }
 </script>

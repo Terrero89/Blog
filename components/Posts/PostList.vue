@@ -21,11 +21,13 @@ export default {
   },
   // will bind prop to is admin, to be able to detect if is admin or not, and display info
   props: {
+    //? we are adding the isAdmin to the specific admin page posts, so we could edit them
     isAdmin: {
       type: Boolean,
       default: false
     },
     // post that we are going to loop through, coming from a parent component,or pina/vuex
+    //?we are passing this prop and binded to the loaded post from vueex in admin
     posts: {
       type: Array,
       required: true
