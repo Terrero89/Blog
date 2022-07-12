@@ -25,8 +25,11 @@ export default {
         return axios.get("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts/" + context.params.postId + ".json")
             //what ever we return, we need to pass that object to the loadedPosts
             .then(res => {
+              //we create a spread array object, because we are using asyncronous code
+              //at the time the asyn code finishes, we dont retrieve an elements because we dont have an id yet.
+              // we add an id manually so, vuex can check for that id in teh array and retrieve it.
                 return {
-                    loadedPosts: res.data
+                    loadedPosts: {...res.data, id: context.params.postId}
                 }
             })
             .catch(e => context.error(e))
@@ -38,17 +41,13 @@ export default {
         //editedPost as a second argument, means that we will receive it and send the current one to replace the
         //the id that is equal to the one we are sending with a PUT request.
         onSubmit(editedPost) {
-            axios.put("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts/" +
-                this.$route.params.postId + ".json", editedPost)
-                .then(res => {
-                  //we can re reroute with this.$router.push(***)
-                  //this case to the admin page.
-                  this.$router.push('/admin')
+            this.$store.dispatch('editPost', editedPost)
+                .then(() => {
+                    this.$router.push("/admin")
                 })
-                .catch(e => console.log(e))
         }
     }
-}
+};
 </script>
 
 <style scoped>

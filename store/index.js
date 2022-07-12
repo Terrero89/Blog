@@ -71,7 +71,20 @@ const createStore = () => {
 
       },
 
-      // editPost(vuexContext, editedPost) { },
+      //editedPost === payload... editedPost is the element from teh array of the edited post
+      editPost(vuexContext, editedPost) {
+       return axios.put("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts/" +
+        editedPost.id + ".json", editedPost)
+        .then(res => {
+         //we will update the id that we want to update.
+
+         vuexContext.commit('editPost', editedPost)
+
+        })
+        .catch(e => console.log(e))
+
+
+      },
       //ACTION TO POST THE BLOG POST
       setPosts(vuexContext, posts) {
         vuexContext.commit('setPosts', posts)
