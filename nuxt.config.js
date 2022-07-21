@@ -29,19 +29,28 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'assets/styles/main.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
+ //runs code before the app loads 
   plugins: [
+    '~plugins/core-components.js',
+    '~plugins/date-filter.js'
   ],
 
   /*
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
   ],
+  axios:{
+    baseURL:process.env.BASE_URL || "https://my-blog-project-48a6f-default-rtdb.firebaseio.com",
+    credentials: false,
+  },
 
   /*
   ** Build configuration
@@ -56,8 +65,15 @@ module.exports = {
   },
 
   env: {
-    baseUrl: process.env.BASE_URL || "https://my-blog-project-48a6f-default-rtdb.firebaseio.com"
+    baseUrl: process.env.BASE_URL || "https://my-blog-project-48a6f-default-rtdb.firebaseio.com",
+
   },
+
+transition: {
+  name: 'fade',
+  mode: 'out-in'
+}
+
 
 
 }

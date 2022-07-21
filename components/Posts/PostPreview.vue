@@ -1,12 +1,9 @@
 <template>
-<!-- template will display a section of the post clicked -->
+  <!-- template will display a section of the post clicked -->
   <nuxt-link :to="postLink" class="post-preview">
     <article>
       <!-- the styles are bond to be used dynamically -->
-      <div
-        class="post-thumbnail"
-
-        :style="{backgroundImage: 'url(' + thumbnail + ')'}"></div>
+      <div class="post-thumbnail" :style="{ backgroundImage: 'url(' + thumbnail + ')' }"></div>
       <div class="post-content">
         <h1>{{ title }}</h1>
         <p>{{ previewText }}</p>
@@ -40,8 +37,8 @@ export default {
       required: true
     }
   },
-// computed property that checks if user is admin or not.
-// if admin, a special route with different layout displayed
+  // computed property that checks if user is admin or not.
+  // if admin, a special route with different layout displayed
   computed: {
     postLink() {
       return this.isAdmin ? '/admin/' + this.id : '/posts/' + this.id //by using this id, the prop will use the id of the element clicked in the parent component

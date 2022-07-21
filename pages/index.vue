@@ -11,12 +11,10 @@
 </template>
 
 <script>
-import PostList from "@/components/Posts/PostList";
+
 
 export default {
-  components: {
-    PostList,
-  },
+
   // asyncData will be efficient to bring the client page full, when pages loads
   // it returns a javascript object for the user to load, if is an array, needs to be changed to an object.
   // for this example, we wrap an object over our array

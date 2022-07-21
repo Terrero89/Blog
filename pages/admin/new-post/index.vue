@@ -10,13 +10,11 @@
 
 <script>
 import axios from 'axios'
-import AdminPostForm from "@/components/Admin/AdminPostForm";
+
 
 export default {
     layout: 'admin',
-    components: {
-        AdminPostForm
-    },
+ 
 
     //method used to post the blog post
     //sent ...postData to send them all in an object with updateDate with new data

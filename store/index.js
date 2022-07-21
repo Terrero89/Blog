@@ -24,7 +24,7 @@ const createStore = () => {
         //posts.id that is equal the id from editedPost.id
         const postIndex = state.loadedPosts.findIndex(posts => posts.id === editedPost.id)
         //we initialize state.loadedPiosts with the found Index, and we replace it with the edited Post
-        state.loadedPosts[postIndex] = editedPost
+        state.loadedPosts[postIndex] = editedPost //!WAYS TO UPDATE FORM DATA
       },
     },
 

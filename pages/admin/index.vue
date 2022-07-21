@@ -14,20 +14,16 @@
 </template>
 
 <script>
-import PostList from '@/components/Posts/PostList'
-import AppButton from '@/components/UI/AppButton'
+
 
 export default {
   layout: 'admin',
-  components: {
-    PostList,
-    AppButton
-  },
+
 
   computed:{
     //will be passed to the posts props (binded)
     //it will load the post in the admin section and
-    
+
     loadedPosts(){
       return this.$store.getters.loadedPosts
     }

@@ -5,12 +5,10 @@
 </template>
 
 <script>
-import PostList from "@/components/Posts/PostList";
+
 
 export default {
-    components: {
-        PostList,
-    },
+  
     //before the computed prop, we could not see the data in blogs, we needed to retrieve that info from vuex
     computed:{
       loadedPosts(){
