@@ -1,14 +1,10 @@
 <template>
-<!-- page will provide authenticatin,if is admin or not whe signing in -->
   <div class="admin-auth-page">
     <div class="auth-container">
-      <!-- Form that is used to input information.  -->
-      <form>
-        <AppControlInput type="email">E-Mail Address</AppControlInput>
-        <AppControlInput type="password">Password</AppControlInput>
-        <!-- conditional that will change depending if is logged in or not. -->
+      <form @submit.prevent="onSubmit">
+        <AppControlInput type="email" v-model="email">E-Mail Address</AppControlInput>
+        <AppControlInput type="password" v-model="password">Password</AppControlInput>
         <AppButton type="submit">{{ isLogin ? 'Login' : 'Sign Up' }}</AppButton>
-        <!-- conditional that will change depending if is admin or not. -->
         <AppButton
           type="button"
           btn-style="inverted"
@@ -20,21 +16,29 @@
 </template>
 
 <script>
-
-
 export default {
-  name: 'AdminAuthPage',
-  layout: 'admin',
-  components: {
-    AppControlInput,
-    AppButton
-  },
+  name: "AdminAuthPage",
+  layout: "admin",
   data() {
     return {
-      isLogin: true
+      isLogin: true,
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    onSubmit() {
+      this.$store.dispatch("authenticateUser", {
+        isLogin: this.isLogin,
+        email: this.email,
+        password: this.password
+      })
+      .then(() => {
+        this.$router.push('/admin');
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -52,4 +56,3 @@ export default {
   box-sizing: border-box;
 }
 </style>
-

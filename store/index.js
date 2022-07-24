@@ -1,112 +1,155 @@
-import Vuex from 'vuex'
-import axios from 'axios'
+import Vuex from "vuex";
+import Cookie from "js-cookie";
 
 const createStore = () => {
-
-  //is like this because it communicates with node js
-
   return new Vuex.Store({
     state: {
       loadedPosts: [],
+      token: null
     },
     mutations: {
-      setPosts(state, posts) {   //payload is == posts
-        state.loadedPosts = posts
+      setPosts(state, posts) {
+        state.loadedPosts = posts;
       },
       addPost(state, post) {
-        //we only push the loadedPosts post to the array
-        state.loadedPosts.push(post)
+        state.loadedPosts.push(post);
       },
-      //to edit posts from the store
       editPost(state, editedPost) {
-        //find it by index
-        //if in loadedPosts we find an index accepts posts as an arguments  and return
-        //posts.id that is equal the id from editedPost.id
-        const postIndex = state.loadedPosts.findIndex(posts => posts.id === editedPost.id)
-        //we initialize state.loadedPiosts with the found Index, and we replace it with the edited Post
-        state.loadedPosts[postIndex] = editedPost //!WAYS TO UPDATE FORM DATA
+        const postIndex = state.loadedPosts.findIndex(
+          post => post.id === editedPost.id
+        );
+        state.loadedPosts[postIndex] = editedPost;
       },
+      setToken(state, token) {
+        state.token = token;
+      },
+      clearToken(state) {
+        state.token = null;
+      }
     },
-
-
     actions: {
-
-      // nuxtServer init
-      // nuxt init works as the main way to interact with nuxt server
       nuxtServerInit(vuexContext, context) {
-        //? using axios
-        return axios.get("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts.json")
-          .then(res => {
-            //?conver data into an array
-            // array of objects to stract or read data
-            const postArray = []
-            for (const key in res.data) {
-              postArray.push({ ...res.data[key], id: key })
+        return context.app.$axios
+          .$get("/posts.json")
+          .then(data => {
+            const postsArray = [];
+            for (const key in data) {
+              postsArray.push({ ...data[key], id: key });
             }
-            //?then commit the data entering in the store.
-            vuexContext.commit('setPosts', postArray)
+            vuexContext.commit("setPosts", postsArray);
           })
-          .catch(e => context.error(e))
+          .catch(e => context.error(e));
       },
-
-
-
       addPost(vuexContext, post) {
-
-        //created object to store posts.
-
         const createdPost = {
           ...post,
           updatedDate: new Date()
-        }
-
-        return axios
-        .post("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts.json", createdPost)
-        .then(result => {
-          vuexContext.commit('addPost', {...createdPost, id: result.data.name})
-        })
-          .catch(e => console.log(e))
-
-
-
+        };
+        return this.$axios
+          .$post(
+            "https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts.json?auth=" +
+              vuexContext.state.token,
+            createdPost
+          )
+          .then(data => {
+            vuexContext.commit("addPost", { ...createdPost, id: data.name });
+          })
+          .catch(e => console.log(e));
       },
-
-      //editedPost === payload... editedPost is the element from teh array of the edited post
       editPost(vuexContext, editedPost) {
-       return axios.put("https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts/" +
-        editedPost.id + ".json", editedPost)
-        .then(res => {
-         //we will update the id that we want to update.
-
-         vuexContext.commit('editPost', editedPost)
-
-        })
-        .catch(e => console.log(e))
-
-
+        return this.$axios
+          .$put(
+            "https://my-blog-project-48a6f-default-rtdb.firebaseio.com/posts/" +
+              editedPost.id +
+              ".json?auth=" +
+              vuexContext.state.token,
+            editedPost
+          )
+          .then(res => {
+            vuexContext.commit("editPost", editedPost);
+          })
+          .catch(e => console.log(e));
       },
-      //ACTION TO POST THE BLOG POST
       setPosts(vuexContext, posts) {
-        vuexContext.commit('setPosts', posts)
+        vuexContext.commit("setPosts", posts);
       },
-
+      authenticateUser(vuexContext, authData) {
+        let authUrl =
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyD1KSQ6F8Ul85UUnUU2zauVKgUXXBuxCMY";
+      if (!authData.isLogin) {
+        authUrl =
+          "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyD1KSQ6F8Ul85UUnUU2zauVKgUXXBuxCMY"
+      }
+        return this.$axios
+          .$post(authUrl, {
+            email: authData.email,
+            password: authData.password,
+            returnSecureToken: true
+          })
+          .then(result => {
+            vuexContext.commit("setToken", result.idToken);
+            localStorage.setItem("token", result.idToken);
+            localStorage.setItem(
+              "tokenExpiration",
+              new Date().getTime() + Number.parseInt(result.expiresIn) * 1000
+            );
+            Cookie.set("jwt", result.idToken);
+            Cookie.set(
+              "expirationDate",
+              new Date().getTime() + Number.parseInt(result.expiresIn) * 1000
+            );
+         
+          })
+          .catch(e => console.log(e));
+      },
+      initAuth(vuexContext, req) {
+        let token;
+        let expirationDate;
+        if (req) {
+          if (!req.headers.cookie) {
+            return;
+          }
+          const jwtCookie = req.headers.cookie
+            .split(";")
+            .find(c => c.trim().startsWith("jwt="));
+          if (!jwtCookie) {
+            return;
+          }
+          token = jwtCookie.split("=")[1];
+          expirationDate = req.headers.cookie
+            .split(";")
+            .find(c => c.trim().startsWith("expirationDate="))
+            .split("=")[1];
+        } else {
+          token = localStorage.getItem("token");
+          expirationDate = localStorage.getItem("tokenExpiration");
+        }
+        if (new Date().getTime() > +expirationDate || !token) {
+          console.log("No token or invalid token");
+          vuexContext.dispatch("logout");
+          return;
+        }
+        vuexContext.commit("setToken", token);
+      },
+      logout(vuexContext) {
+        vuexContext.commit("clearToken");
+        Cookie.remove("jwt");
+        Cookie.remove("expirationDate");
+        if (process.client) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("tokenExpiration");
+        }
+      }
     },
-
-
     getters: {
       loadedPosts(state) {
-        return state.loadedPosts    //return the entire state of the loadedPosts array
+        return state.loadedPosts;
+      },
+      isAuthenticated(state) {
+        return state.token != null;
       }
+    }
+  });
+};
 
-    },
-  })
-
-
-}
-
-
-export default createStore
-
-
-
-
+export default createStore;

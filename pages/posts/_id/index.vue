@@ -24,6 +24,7 @@
 <script>
 import axios from 'axios'
 export default {
+
   asyncData(context) {
     //we use params.id with context because we are using asyncData
     //then the promise from axios

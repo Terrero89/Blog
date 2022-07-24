@@ -1,4 +1,5 @@
 const pkg = require('./package')
+const bodyParser = require('body-parser')
 
 module.exports = {
   mode: 'universal',
@@ -35,7 +36,7 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
- //runs code before the app loads 
+ //runs code before the app loads
   plugins: [
     '~plugins/core-components.js',
     '~plugins/date-filter.js'
@@ -66,14 +67,21 @@ module.exports = {
 
   env: {
     baseUrl: process.env.BASE_URL || "https://my-blog-project-48a6f-default-rtdb.firebaseio.com",
+    apiKey: ''
 
   },
 
 transition: {
   name: 'fade',
   mode: 'out-in'
-}
+},
 
+router:{
+  middleware: 'log'
+},
+
+//collection of node/express middleware
+//to integrate express/node into nuxt
 
 
 }
