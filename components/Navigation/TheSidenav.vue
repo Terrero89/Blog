@@ -52,7 +52,8 @@ export default {
 .sidenav {
   height: 100%;
   width: 300px;
-  background-color: white;
+
+background-image: radial-gradient( circle 610px at 5.2% 51.6%,  rgba(5,8,114,1) 0%, rgba(7,3,53,1) 97.5% );
   z-index: 10000;
   position: fixed;
   top: 0;
@@ -82,7 +83,7 @@ export default {
 
 .nav-item a {
   text-decoration: none;
-  color: black;
+  color: rgb(255, 255, 255);
   font-size: 1.5rem;
 }
 

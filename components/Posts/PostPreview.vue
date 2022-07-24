@@ -1,6 +1,7 @@
 <template>
   <!-- template will display a section of the post clicked -->
   <nuxt-link :to="postLink" class="post-preview">
+
     <article>
       <!-- the styles are bond to be used dynamically -->
       <div class="post-thumbnail" :style="{ backgroundImage: 'url(' + thumbnail + ')' }"></div>
@@ -50,10 +51,14 @@ export default {
 
 <style scoped>
 .post-preview {
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 2px #ccc;
+  border: 1px solid rgb(247, 247, 247);
+  border-radius: 10px;
+box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.15);
   background-color: white;
   width: 90%;
+
+  margin: 1rem 0;
+
 }
 
 a {
@@ -69,19 +74,26 @@ a {
 }
 
 .post-thumbnail {
+  border: 1px solid rgb(241, 241, 241);
   width: 100%;
-  height: 200px;
+  height: 220px;
   background-position: center;
   background-size: cover;
+  object-fit:fill;
+  border-bottom: solid rgb(0, 0, 0,0.1) 1px;
+
 }
 
 .post-content {
   padding: 10px;
   text-align: center;
+  padding: 2rem;
+  min-height: 9rem;
 }
 
 a:hover .post-content,
 a:active .post-content {
-  background-color: #ccc;
+  background-color: rgb(231, 227, 227);
+  border-radius: 10px;
 }
 </style>
