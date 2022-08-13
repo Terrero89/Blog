@@ -20,6 +20,7 @@ module.exports = {
     ]
   },
 
+  target: 'static',
   /*
   ** Customize the progress-bar color
   */
